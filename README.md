@@ -3,6 +3,7 @@
 - [THE BASICS OF REACT](#the-basics-of-react)
   - [Before React](#before-react)
   - [Our First React Element](#our-first-react-element)
+  - [Events in React](#events-in-react)
 
 ## THE BASICS OF REACT
 
@@ -113,3 +114,23 @@
 - 바닐라js에서는 HTML을 먼저 만들고, 그걸 Javascript로 가져와서 HTML을 수정하는 과정이었음
 
 - React JS에서는 Javascript로 시작해 HTML이 된다.
+
+### Events in React
+
+```javascript
+const btn = React.createElement(
+  "button", // HTML 생성
+  {
+    onClick: () => console.log("im clicked"), // event listener 등록
+  },
+  "Click me" // content
+);
+```
+
+```javascript
+  {
+    onClick: () => console.log("im clicked"),
+  },
+```
+
+`on` + `eventListener`를 해주어야 `React JS`는 이벤트리스터인 것을 이해할 수 있다.

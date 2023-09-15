@@ -5,6 +5,7 @@
   - [Our First React Element](#our-first-react-element)
   - [Events in React](#events-in-react)
   - [JSX](#jsx)
+  - [JSX part Two](#jsx-part-two)
 
 ## THE BASICS OF REACT
 
@@ -171,3 +172,35 @@ const Title = (
 - 브라우저는 `JSX`를 이해하지 못하므로 뭔가를 설치해줘야 한다.
   - `Babel`을 이용해 `JSX`로 적은 코드를 브라우저가 이해할 수 있는 형태로 바꿔줄 수 있다.
     `https://unpkg.com/@babel/standalone/babel.min.js`
+
+### JSX part Two
+
+```javascript
+const container = React.createElement("div", null, [Title, Button]);
+```
+
+이 부분을 `JSX` 문법으로 바꿔보자.
+
+```JSX
+const Container = () => (
+      <div>
+        <Title />
+        <Button />
+      </div>
+    );
+```
+
+> 주의할 점은 컴포넌트의 첫 글자(`Title`, `Button`)는 반드시 대문자여야 한다. 만약 소문자로 적는다면 `HTML` 태그라고 생각하기 때문이다.
+
+- `container`를 `Container`로 바꾼 다음, `div` 안에 `Title`과 `Button`을 렌더링 해준다.
+
+- 이때, `Title`과 `Button`을 함수로 선언해주어야 한다.
+
+  - `() =>`와 같은 `arrow function`로 함수로 만든다.
+  - ```JSX
+    const Button = () => (
+
+    )
+    ```
+
+- 컨테이너도 함수로 바꿔서 작성할 수 있다.

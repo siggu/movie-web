@@ -10,6 +10,7 @@
 
 - [STATE](#state)
   - [Understanding State](#understanding-state)
+  - [setState part One](#setstate-part-one)
 
 ## THE BASICS OF REACT
 
@@ -286,5 +287,43 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 가상 돔을 사용함으로써, 변경이 필요한 최소한의 요소만 실제 DOM에 반영되기 때문에 불필요한 연산을 줄이고 성능을 향상시킬 수 있다.
 
 </p>
+</div>
+</details>
+
+### setState part One
+
+![Alt text](image-1.png)
+
+- `React.useState()`는 `undefined`와 함수를 지닌 배열을 받는다.
+
+- 이때, `undefined`는 `data`이고, `f`는 `data`를 바꿀 때 사용하는 함수이다.
+
+  > `data`의 초기값을 설정해줄 수도 있다.
+
+- 아래의 두 코드는 같은 역할을 한다.
+
+  ```JSX
+  const data = React.useState(0);
+  ```
+
+  ```JSX
+  let counter = 0;
+  function countUp() {
+    // code
+  }
+  ```
+
+- `counter`와 `modifier`를 자바스크립트의 구조 분해 할당 문법을 통해 할당해줄 수 있다.
+
+  ```JSX
+    const [counter, modifier] = React.useState(0);
+  ```
+
+<details>
+<summary>구조 분해 할당</summary>
+<div markdown="1">
+
+<a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">MDN - 구조 분해 할당</a>
+
 </div>
 </details>

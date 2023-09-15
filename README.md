@@ -1,11 +1,15 @@
 # movie-web
 
 - [THE BASICS OF REACT](#the-basics-of-react)
+
   - [Before React](#before-react)
   - [Our First React Element](#our-first-react-element)
   - [Events in React](#events-in-react)
   - [JSX](#jsx)
   - [JSX part Two](#jsx-part-two)
+
+- [STATE](#state)
+  - [Understanding State](#understanding-state)
 
 ## THE BASICS OF REACT
 
@@ -204,3 +208,83 @@ const Container = () => (
     ```
 
 - 컨테이너도 함수로 바꿔서 작성할 수 있다.
+
+## STATE
+
+### Understanding State
+
+- `state`는 기본적으로 데이터가 저장되는 곳이다.
+
+  - 바닐라 js에서 바뀌는 데이터인 `counter`를 `state`로 만들 수 있다.
+
+- `React.js` 코드에서 카운트를 셀 수 있게 만들려고 한다.
+
+  - 먼저 별로 좋지 않은 방식으로 만들어보자.
+
+- 변수를 JSX에 전달하는 방법
+
+  - `counter` 변수를 선언해주고, 그 변수를 중괄호 안에 넣어주면 된다.
+
+    `let counter = 0;`
+
+    ```JSX
+    <h3>Total clicks: {counter}</h3>
+    ```
+
+- 이벤트리스너를 만들 필요 없이 `onClick prop`을 만들고 `counter`를 증가시키는 함수를 넣어주면 된다.
+
+  ```jsx
+  function countUp() {
+    counter = counter + 1;
+  }
+  ```
+
+  ```JSX
+  <button onClick={countUp}>Click me</button>
+  ```
+
+- 버튼을 눌렀을 때, 분명 `counter`는 증가하고 있지만 UI가 업데이트되고 있지 않다.
+
+  - 그 이유는 `Container`의 렌더링을 한 번만 해주고 있기 때문이다.
+
+- 렌더링 함수를 만들고, `counter`의 값을 증가시킬 때마다 리렌더링 해주면 `Container`는 업데이트된 `counter`를 가지고 있을 것이다.
+
+  ```jsx
+  const root = document.getElementById("root");
+  let counter = 0;
+  function countUp() {
+    counter = counter + 1;
+    Render();
+  }
+  function Render() {
+    ReactDOM.render(<Container />, root);
+  }
+  const Container = () => (
+    <div>
+      <h3>Total clicks: {counter}</h3>
+      <button onClick={countUp}>Click me</button>
+    </div>
+  );
+  Render();
+  ```
+
+<details>
+<summary>바닐라 JS와 ReactJS의 노드 변경 처리 과정</summary>
+<div markdown="1">
+<p>
+1. 바닐라 JS
+
+DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변경된 DOM 트리를 다시 계산하고, 렌더 트리를 다시 생성한 후 화면에 그린다.
+
+</p>
+
+<p>
+2. ReactJS
+
+새로운 가상 DOM 트리를 생성하고, 이전의 가상 DOM 트리와 비교하여 변경된 부분만 파악함. 그리고 변경된 부분만 실제 DOM에 반영하는 방식을 사용함. 이 과정을 재조정(Reconciliation) 또는 Diffing 이라고 함
+
+가상 돔을 사용함으로써, 변경이 필요한 최소한의 요소만 실제 DOM에 반영되기 때문에 불필요한 연산을 줄이고 성능을 향상시킬 수 있다.
+
+</p>
+</div>
+</details>

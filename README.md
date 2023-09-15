@@ -4,6 +4,7 @@
   - [Before React](#before-react)
   - [Our First React Element](#our-first-react-element)
   - [Events in React](#events-in-react)
+  - [JSX](#jsx)
 
 ## THE BASICS OF REACT
 
@@ -134,3 +135,39 @@ const btn = React.createElement(
 ```
 
 `on` + `eventListener`를 해주어야 `React JS`는 이벤트리스터인 것을 이해할 수 있다.
+
+### JSX
+
+- `JSX`는 `JavaScript`를 확장한 문법으로, HTML에서 사용한 문법과 유사한 방식으로 `React` 요소를 만들 수 있게 해준다.
+
+```JSX
+const Title = (
+      <h3 id="title" onMouseEnter={() => console.log("im clicked")}>
+        Hello I'm a title
+      </h3>
+    );
+```
+
+```JSX
+ const Button = (
+      <button
+        style={{
+          backgroundColor: "tomato",
+        }}
+        onClick={() => console.log("im clicked")}
+      >
+        Click me
+      </button>
+    );
+```
+
+- `JSX` 작성 방식
+
+  1. 태그를 적어준다.
+  2. 안에 내용을 적어준다.
+  3. `props`는 `HTML`과 똑같이 적어준다.
+  4. 이벤트리스너는 태그의 속성처럼 추가해주면 된다.
+
+- 브라우저는 `JSX`를 이해하지 못하므로 뭔가를 설치해줘야 한다.
+  - `Babel`을 이용해 `JSX`로 적은 코드를 브라우저가 이해할 수 있는 형태로 바꿔줄 수 있다.
+    `https://unpkg.com/@babel/standalone/babel.min.js`

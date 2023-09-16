@@ -13,6 +13,7 @@
   - [setState part One](#setstate-part-one)
   - [setState part Two](#setstate-part-two)
   - [State Functions](#state-functions)
+  - [Inputs and State](#inputs-and-state)
 
 ## THE BASICS OF REACT
 
@@ -105,7 +106,11 @@
   - `span` 만들기
 
   ```javascript
-  const span = React.createElement("span", { id: "sexy-span", style: { color: "red" } }, "Hello I'm a span");
+  const span = React.createElement(
+    "span",
+    { id: "sexy-span", style: { color: "red" } },
+    "Hello I'm a span"
+  );
   ```
 
   여러 `argument`를 작성할 수 있다.
@@ -393,3 +398,76 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 
     </div>
     </details>
+
+### Inputs and State
+
+- 단위 변환 앱을 만들어보자.
+
+- `JSX` 문법은 `HTML`과 매우 유사한 형식으로 `form`을 작성할 수 있다.
+
+  - 만약 `production.min.js`을 `import` 하면 `HTML`의 속성을 그대로 사용할 수 있다. 하지만, `development.js`를 `import` 한다면 다르게 써주어야 한다.
+
+    > for ${\rightarrow}$ htmlFor
+    > class ${\rightarrow}$ className
+
+    <details>
+    <summary>production과 development의 차이</summary>
+    <div markdown="1">
+    <p>
+    production은 배포 모드, development는 개발 모드를 의미한다. 개발모드는 버그로 이어질 수 있는 요소들을 미리 경고하는 검증 코드가 포함되어 있다.
+    </p>
+    <p>
+    production 모드로 사용하면 편집기 에러 메시지가 줄어들고, 코드가 줄어듬으로써 파일이 가벼워지고 따라서 배포하기 좋아진다.
+    </p>
+    참고: <a href="https://ui.toast.com/weekly-pick/ko_20191212">개발(Development) 모드는 어떻게 작동할까?</a>
+
+    </div>
+    </details>
+
+    ```js
+    <div>
+      <h1>Super Converter</h1>
+      <label for="minutes">Minutes</label>
+      <input id="minutes" placeholder="Minutes" type="number" />
+      <label for="hours">Hours</label>
+      <input id="hours" placeholder="Hours" type="number" />
+    </div>
+    ```
+
+- `ReactJS`에서는 `input`은 `uncontrolled`이다.
+
+  - `input`의 `value`를 통제할 수 없기 때문에 `state`를 만들어줄 것이다.
+
+- `const [minutes, setMinutes] = React.useState();`
+
+  > `useState()`의 `default`는 비워도 되고, `""`로 해도 된다.
+
+  - `useState()`는 `array`를 제공하는데, 첫 번째 `element`는 현재의 값이 되고, 두 번째 `element`는 데이터를 변경해주는 함수가 들어간다.
+
+- 사용자가 다른 값을 입력할 때마다 `value`를 업데이트 시켜보자.
+  ![Alt text](image-3.png)
+
+  > `console.log(event);`를 해보면 `target`에 `value`를 가지고 있다는 것이다. 즉, `event.target.value`를 해주면 `value`값에 접근할 수 있다.
+
+  ```JSX
+    const [minutes, setMinutes] = React.useState();
+      const onChange = (event) => {
+        setMinutes(event.target.value);   // React.useState()의 modifier 함수: event.target.value(사용자의 input value값)를 받아서 데이터(minutes)를 업데이트 하고 리렌더링 해준다.
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <label for="minutes">Minutes</label>
+          <input
+            value={minutes}   // React.useState()의 데이터값(=사용자의 input값)
+            id="minutes"
+            placeholder="Minutes"
+            type="number"
+            onChange={onChange}   // onChange 이벤트리스너: input에 변화가 있을 때마다 onChange 함수를 호출한다.
+          />
+          <h4>You want to convert {minutes}</h4>    // input값이 변할 때마다 데이터 값이 업데이트 된다.
+          <label for="hours">Hours</label>
+          <input id="hours" placeholder="Hours" type="number" />
+        </div>
+      );
+  ```

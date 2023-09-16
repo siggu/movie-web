@@ -14,6 +14,7 @@
   - [setState part Two](#setstate-part-two)
   - [State Functions](#state-functions)
   - [Inputs and State](#inputs-and-state)
+  - [State Practice part One](#state-practice-part-one)
 
 ## THE BASICS OF REACT
 
@@ -471,3 +472,49 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
         </div>
       );
   ```
+
+### State Practice part One
+
+- 분을 시로 바꿔주는 변환기를 만들어보자.
+
+  - ```JSX
+    <div>
+      <label for="hours">Hours</label>
+      <input
+        value={Math.round(minutes / 60)}
+        id="hours"
+        placeholder="Hours"
+        type="number"
+      />
+    </div>
+    ```
+    - `Hours`의 `value`에도 `minutes` 값을 받으면 `Minutes`의 `value`값을 바꾸면 분과 시의 `value`가 동시에 바뀐다. 하지만, `Hours`에는 `onChange` 함수가 없기 때문에 `Hours`의 `value`는 바꿀 수 없다.
+    - `mintes`에 60을 나눠주면 시가 되기 때문에 `Math.round()` 함수를 이용해 반올림 해준다.
+
+- 리셋 버튼도 만들어보자.
+
+  - `reset` 함수를 만들어주고
+
+    ```JSX
+      function App() {
+        ...
+        const reset = () => setMinutes(0);
+        return (
+          ...
+        );
+      }
+    ```
+
+  - 버튼에 `onClick` 이벤트리스너를 만들어주면 된다.
+    ```JSX
+    function App() {
+      ...
+      const reset = () => setMinutes(0);
+      return (
+        <div>
+          ...
+          <button onClick={reset}>Reset</button>
+        </div>
+      );
+    }
+    ```

@@ -15,6 +15,7 @@
   - [State Functions](#state-functions)
   - [Inputs and State](#inputs-and-state)
   - [State Practice part One](#state-practice-part-one)
+  - [State Practice part Two](#state-practice-part-two)
 
 ## THE BASICS OF REACT
 
@@ -514,6 +515,64 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
         <div>
           ...
           <button onClick={reset}>Reset</button>
+        </div>
+      );
+    }
+    ```
+
+### State Practice part Two
+
+- 단위 변환을 뒤집는 `flip function`을 만들어보자.
+
+  - 버튼을 누르면 `Hours`를 `enabled` 해주고, `Minutes`를 `disabled`하게 해준다.(다시 누르면 반대)
+
+    ```JSX
+    function App() {
+      const [amount, setAmount] = React.useState();
+      const [flipped, setFlipped] = React.useState(false);    // flipped의 초기값을 false로 지정
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onFlip = () => {
+        reset();
+        setFlipped((current) => !current);    // 현재 상태에서 부정명제를 붙이므로 flipped는 true 상태였다면 false로, false 상태였다면 true로 바뀌게 된다.
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <div>
+            <label for="minutes">Minutes</label>
+            <input
+              value={flipped ? amount * 60 : amount}
+              {/*
+              flipped가 true라면 disabled=true(==="분" 변경 불가, "시" 변경 가능)이므로 Minutes의 값은 amount*60(===입력한 값("시") * 60 === "분")
+              flipped가 false(===disabled=false)(==="시" 변경 불가, "분" 변경 가능)라면 amount(===입력한 값("분") 그대로)
+              */}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={flipped}    // flipped의 초기값은 false이므로 처음에는 변경이 가능함
+            />
+          </div>
+          <div>
+            <label for="hours">Hours</label>
+            <input
+              value={flipped ? amount : Math.round(amount / 60)}
+              {/*
+              flipped가 true라면 disabled=!ture=false(==="시" 변경 가능, "분" 변경 불가)이므로 Hours의 값은 amount(===입력한 값("시"))
+              flipped가 false라면 disabled=!false=true)(==="분" 변경 가능, "시" 변경 불가)라면 Math.round(amount / 60)(===입력한 값("분" / 60))
+              */}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              onChange={onChange}
+              disabled={!flipped}   // flipped의 초기값은 false이고, 부정명제이니 disabled=true. 처음에는 변경이 불가능함
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>Flip</button>
         </div>
       );
     }

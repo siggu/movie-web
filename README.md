@@ -11,6 +11,7 @@
 - [STATE](#state)
   - [Understanding State](#understanding-state)
   - [setState part One](#setstate-part-one)
+  - [setState part Two](#setstate-part-two)
 
 ## THE BASICS OF REACT
 
@@ -327,3 +328,28 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 
 </div>
 </details>
+
+### setState part Two
+
+- `React.useState()`에서 `f`는 보통 `set + 데이터 이름`의 형태이다.
+
+  - `const [counter, setCounter] = React.useState(0);`
+
+- `setCounter` 함수는 받은 데이터 값으로 업데이트하고, 리렌더링을 한다.
+  1. `counter` 데이터를 받음
+  2. `return`문에 데이터를 담고 있음
+     ```JSX
+     return (
+           <div>
+             <h3>Total clicks: {counter}</h3>
+             <button onClick={onClick}>Click me</button>
+           </div>
+         );
+     ```
+  3. 버튼을 클릭하면 클릭 이벤트리스너가 `onClick` 함수를 호출한다.
+     ```JSX
+     const onClick = () => {
+           setCounter(counter + 1);
+         };
+     ```
+  4. `setCounter` 함수는 counter 값을 업데이트하고 브라우저를 리렌더링 한다.

@@ -12,6 +12,7 @@
   - [Understanding State](#understanding-state)
   - [setState part One](#setstate-part-one)
   - [setState part Two](#setstate-part-two)
+  - [State Functions](#state-functions)
 
 ## THE BASICS OF REACT
 
@@ -353,3 +354,42 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
          };
      ```
   4. `setCounter` 함수는 counter 값을 업데이트하고 브라우저를 리렌더링 한다.
+
+### State Functions
+
+- 흔하지는 않지만 `counter`가 다른 곳에서 변경될 수 있기 때문에 현재 `setState` 방법은 별로 좋지 않다.
+
+- `state`를 바꾸는 두 가지 방법
+
+  1. `setModifier`를 이용해 원하는 값을 넣어주기(새 값을 넣어주기)
+  2. 이전 값을 이용해서 현재 값을 계산하기
+
+     - 현재 사용하는 방법
+       ```JSX
+       setCounter(counter + 1);
+       ```
+     - 더 좋은 방법
+
+       ```JSX
+       setCounter((current) => current + 1);
+       ```
+
+- 둘 다 현재의 `state`를 가지고 새로운 값을 계산하지만, 아래쪽이 더 안전하다.
+
+  - 함수를 사용하면 리액트가 `current`가 확실히 현재 값이라고 보장해주기 때문이다.
+    <details>
+    <summary>setState()</summary>
+    <div markdown="1">
+    <p>
+    setState()는 컴포넌트를 항상 즉각적으로 갱신하지 않는다. 여러 변경 사항과 함께 일괄적으로 갱신하거나, 나중으로 미룰 수 있다.
+    </p>
+
+    <p>
+    (state, props) => stateChange 와 같은 형태를 사용하면 갱신이 적용된 뒤에 실행되는 것이 보장된다.
+    </p>
+
+    <a href="https://ko.legacy.reactjs.org/docs/react-component.html#setstate">
+    리액트 공식문서 - setState()</a>
+
+    </div>
+    </details>

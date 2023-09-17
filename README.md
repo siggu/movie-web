@@ -16,6 +16,7 @@
   - [Inputs and State](#inputs-and-state)
   - [State Practice part One](#state-practice-part-one)
   - [State Practice part Two](#state-practice-part-two)
+  - [Final Practice and Recap](#final-practice-and-recap)
 
 ## THE BASICS OF REACT
 
@@ -577,3 +578,217 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
       );
     }
     ```
+
+### Final Practice and Recap
+
+- 킬로미터-인치 변환기를 만들고, 사용자가 시-분 변환기와 킬로미터-인치 변환기를 선택할 수 있도록 만들어보자.
+
+- 원래 작성했던 시-분 변환기 코드를 새로운 컴포넌트(함수)(`MinutesToHours`)에 옮기고 `App` 컴포넌트(함수)에 분할정복한다.
+
+  ```JSX
+  function MinutesToHours() {...}
+  function App() {
+    return (
+      <div>
+        <h1>Super Converter</h1>
+        <MinutesToHours />
+      </div>
+    );
+  }
+  ```
+
+  이렇게 하면 `App` 컴포넌트는 `div`, `h1`, `MinutesToHours`를 렌더링 해주게 된다. 즉, 기존에 하던 역할은 그대로 유지할 수 있다는 것이다.
+
+- 새로 만들 킬로미터-인치 변환 컴포넌트를 만들고 `App` 컴포넌트에 분할정복 해주면
+
+  ```JSX
+  function MinutesToHours() {...}
+  function App() {
+    return (
+      <div>
+        <h1>Super Converter</h1>
+        <MinutesToHours />
+        <KmToMiles />
+      </div>
+    );
+  }
+  ```
+
+  이런 식으로 할 수 있다. 하지만 이 경우에는 `MinutesToHours`와 `KmToMiles` 두 개를 렌더링 하고 있고 사용자가 선택하지 못한다.
+
+- `App` 컴포넌트가 `state`를 가지게 한 다음 이 `state`를 이용해 어떤 변환기를 선택할 것인지 확인할 것이다.
+
+- [Input and State](#inputs-and-state)에서 사용자의 `input`값을 `event.target.value`로 알아낸 것처럼 `option` 태그에 `value`값을 주게 되면 사용자가 선택한 옵션을 알아낼 수 있다.
+
+  ```JSX
+  function App() {
+        const [index, setIndex] = React.useState("-1");
+        const onSelect = (evnet) => {
+          setIndex(event.target.value);
+        };
+        return (
+          <div>
+            <h1>Super Converter</h1>
+            <select value={index} onChange={onSelect}>
+              <option value="-1">Select your units</option>
+              <option value="0">Minutes & Hours</option>
+              <option value="1">Km & Miles</option>
+            </select>
+          </div>
+        );
+      }
+  ```
+
+- 삼항연산자를 이용해 `value` 값에 따라 어떤 컴포넌트를 렌더링할 것인지 결정할 수 있다.
+
+  ```JSX
+  function App() {
+        const [index, setIndex] = React.useState("-1");
+        const onSelect = (evnet) => {
+          setIndex(event.target.value);
+        };
+        return (
+          <div>
+            <h1>Super Converter</h1>
+            <select value={index} onChange={onSelect}>
+              <option value="-1">Select your units</option>
+              <option value="0">Minutes & Hours</option>
+              <option value="1">Km & Miles</option>
+            </select>
+            <hr />
+            {index === "-1" ? "Please select your units" : null}
+            {index === "0" ? <MinutesToHours /> : null}
+            {index === "1" ? <KmToMiles /> : null}
+          </div>
+        );
+      }
+  ```
+
+<details>
+<summary>최종 코드</summary>
+<div markdown="1">
+
+```js
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState();
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label for="minutes">Minutes</label>
+            <input
+              value={inverted ? amount * 60 : amount}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={inverted}
+            />
+          </div>
+          <div>
+            <label for="hours">Hours</label>
+            <input
+              value={inverted ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              onChange={onChange}
+              disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : "Invert"}
+          </button>
+        </div>
+      );
+    }
+
+    function KmToMiles() {
+      const [amount, setAmount] = React.useState();
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label for="km">Km</label>
+            <input
+              value={inverted ? amount * 1.609 : amount}
+              id="km"
+              placeholder="KM"
+              type="number"
+              onChange={onChange}
+              disabled={inverted}
+            />
+          </div>
+          <div>
+            <label for="miles">Miles</label>
+            <input
+              value={inverted ? amount : amount / 1.609}
+              id="miles"
+              placeholder="Miles"
+              type="number"
+              onChange={onChange}
+              disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : "Invert"}
+          </button>
+        </div>
+      );
+    }
+
+    function App() {
+      const [index, setIndex] = React.useState("-1");
+      const onSelect = (evnet) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="-1">Select your units</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "-1" ? "Please select your units" : null}
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
+```
+
+</div>
+</details>

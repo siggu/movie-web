@@ -9,6 +9,7 @@
   - [JSX part Two](#jsx-part-two)
 
 - [STATE](#state)
+
   - [Understanding State](#understanding-state)
   - [setState part One](#setstate-part-one)
   - [setState part Two](#setstate-part-two)
@@ -17,6 +18,9 @@
   - [State Practice part One](#state-practice-part-one)
   - [State Practice part Two](#state-practice-part-two)
   - [Final Practice and Recap](#final-practice-and-recap)
+
+- [PROPS](#props)
+  - [Props](#props-1)
 
 ## THE BASICS OF REACT
 
@@ -76,8 +80,6 @@
   이런 식으로 계속 만든다면 많은 함수와 이벤트리스너를 만들게될 것이다.
 
   위에서 작성한 바닐라js는 `vanilla.html` 파일에 옮기고 새로 작성해보자.
-
-  ***
 
   - 우선, React JS를 설치하기 위해서는 두 개의 Javascript 코드를 import 해야 한다.
 
@@ -219,6 +221,8 @@ const Container = () => (
     ```
 
 - 컨테이너도 함수로 바꿔서 작성할 수 있다.
+
+<br>
 
 ## STATE
 
@@ -801,3 +805,227 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 
 </div>
 </details>
+
+<br>
+
+## PROPS
+
+### Props
+
+- `Props`는 부모 컴포넌트로부터 자식 컴포넌트에 데이터를 보낼 수 있게 해주는 일종의 방식이다.
+
+  - 위에서 부모 컴포넌트는 `App` 컴포넌트, 자식 컴포넌트는 `MinutesToHours`와 `KmToMiles`가 될 수 있다.
+
+- `Props`를 이해하고 왜 필요한지를 보기 위해 `Props`로 해결이 가능하게 될 문제를 봐보자.
+
+  - 어플리케이션을 만들 때 버튼들이 있다.
+    - 이 버튼들은 똑같게 보이도록 만든다. 하지만 아직 컴포넌트의 재사용 방법을 모르기 때문에 버튼마다 컴포넌트를 만들 것이다.
+
+- 저장 버튼을 만들어보자.
+
+  ```JSX
+  function SaveBtn() {
+      return (
+        <button
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          Save Changes
+        </button>
+      );
+    }
+  function App() {
+      return (
+        <div>
+          <SaveBtn />
+        </div>
+      );
+    }
+  ```
+
+  - 여기서 확인 버튼을 만드려고 할 때, 함수를 만들고 `SaveBtn` 컴포넌트의 `JSX` 부분을 복사 붙여넣기할 것이다.
+
+    ```JSX
+    function SaveBtn() {
+        return (
+          <button
+            style={{
+              backgroundColor: "tomato",
+              color: "white",
+              padding: "10px 20px",
+              border: 0,
+              borderRadius: 10,
+            }}
+          >
+            Save Changes
+          </button>
+        );
+      }
+      function ConfirmBtn() {
+        return (
+          <button
+            style={{
+              backgroundColor: "tomato",
+              color: "white",
+              padding: "10px 20px",
+              border: 0,
+              borderRadius: 10,
+            }}
+          >
+            Confirm
+          </button>
+        );
+      }
+      function App() {
+        return (
+          <div>
+            <SaveBtn />
+            <ConfirmBtn />
+          </div>
+        );
+      }
+    ```
+
+    - 두 버튼의 생김새는 똑같겠지만 버튼이 늘어날 때마다 컴포넌트를 만들고 스타일을 복사 붙여넣기 하는 것은 매우 귀찮은 작업이다.
+
+- 스타일을 복사 붙여넣기 하는 것 대신에 설정이 가능하고, 텍스트만 변경 가능한 컴포넌트를 만들어보자.
+
+- `Btn` 컴포넌트를 만들고, 두 개의 `Btn` 컴포넌트를 분할정복 해주자.
+
+  ```JSX
+  function Btn() {
+      return (
+        <button
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          Save Changes
+        </button>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <Btn />
+          <Btn />
+        </div>
+      );
+    }
+  ```
+
+- `Btn`의 `sytle`을 재사용 하고, 텍스트를 설정 및 변경하고자 한다.
+
+  - `HTML`이나 `ReactJS`의 `input`, `button`, `img`, 등에서
+    - ```jsx
+      <input type="text" />   // type="text"
+      <button onClick={onClick}></button>   // onClick={}
+      <img src="" />    // src=""
+      ```
+    - 이런 구문(syntax)을 사용한다.
+    - 이 구문을 컴포넌트에 똑같이 적용해 데이터를 전달시킬 수 있다.
+
+- 이름은 마음대로 지어도 된다.
+
+  ```JSX
+  function App() {
+        return (
+          <div>
+            <Btn text="Save Changes" />
+            <Btn text="Countinue" />
+          </div>
+        );
+      }
+  ```
+
+- 이렇게 해도 달라지는건 없다. 왜냐하면 `Btn` 컴포넌트는 `text`를 쓰고 있지 않기 때문이다.
+
+  - 모든 컴포넌트는 인자를 받는데, 이 인자를 `Props`라고 한다.
+    > `Btn`으로부터 전달 받는 `propreties`
+
+- 결국 `<Btn text="Save Changes" />`는 `Btn` 함수를 불러서 `text`라는 인자를 보내는 것과 같다.
+
+  - `Btn({text:"save Changes"})`
+
+- `Props`를 `console.log` 해보자.
+
+  ```JSX
+  function Btn(props){
+    console.log(props);
+    return (
+      ...
+    )
+  }
+  ```
+
+  ![Alt text](image-4.png)
+
+  - `Props`는 `App` 컴포넌트에서 보낸 모든 것들을 갖는 오브젝트이다. 그리고, `text`라는 이름의 `key`를 가지고 있다.
+
+- `Btn` 컴포넌트의 텍스트 부분을 `Props` 오브젝트의 `text`를 참조하는 것으로 바꾸면
+
+  ```JSX
+    function Btn(props) {
+        return (
+          <button
+            ...
+          >
+            {props.text}
+          </button>
+        );
+      }
+  ```
+
+  - 이름만 다른 모양이 같은 두 버튼을 생성할 수 있다.
+
+- 여기서 `shortcut`이 존재하는데 `Props`는 오브젝트이기 때문에 중괄호를 열고 `text`로 받아주면 `{props.text}`와 같은 형태로 써줄 필요 없이 `{text}`만 써줄 수 있다.
+
+  ```JSX
+    function Btn({ text }) {
+        return (
+          <button
+            ...
+          >
+            {text}
+          </button>
+        );
+      }
+  ```
+
+  - 이런 식으로 여러 `Props`를 받을 수도 있다.
+
+    ```jsx
+    function Btn({ text, big }) {
+      return (
+        <button
+          style={{
+            ...
+            fontSize: big ? 22 : 16,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <Btn text="Save Changes" big={true} />
+          <Btn text="Countinue" big={false} />
+        </div>
+      );
+    }
+    ```
+
+    ![Alt text](image-5.png)

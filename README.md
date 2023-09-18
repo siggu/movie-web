@@ -21,6 +21,7 @@
 
 - [PROPS](#props)
   - [Props](#props-1)
+  - [Memo](#memo)
 
 ## THE BASICS OF REACT
 
@@ -1029,3 +1030,100 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
     ```
 
     ![Alt text](image-5.png)
+
+### Memo
+
+- `Btn`에 `onClick function`을 달아보자.
+
+  - `Save Changes` 버튼에 단순히 `text`를 넘기는 `useState`와 `text` 값을 업데이트 하는 함수를 만들자.
+
+    ```jsx
+    function App() {
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
+      return (
+        <div>
+          <Btn text={value} onClick={changeValue} />
+          <Btn text="Countinue" />
+        </div>
+      );
+    }
+    ```
+
+  - 여기서 `changeValue` 함수에 구문의 이름을`onClick`으로 지었다고 해서 이벤트리스너가 아니라, `Btn`으로 들어가는 `Prop`이다.
+  - 이벤트리스너를 만들기 위해서는 `HTML`의 `button` 안에 직접 이벤트리스너를 작성해주어야 한다.
+
+    ```jsx
+    function Btn({ text, onClick }) {
+      return (
+        <button
+          onClick={onClick}
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+
+    function App() {
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
+      return (
+        <div>
+          <Btn text={value} onClick={changeValue} />
+          <Btn text="Countinue" />
+        </div>
+      );
+    }
+    ```
+
+- `App` 컴포넌트에 두 개의 버튼 컴포넌트가 분할정복 되어 있는데, 하나는 클릭 이벤트가 발생하면 데이터가 변경되고 하나는 데이터가 변경되지 않는다. `Btn` 컴포넌트에 `console.log(text, "was rended")`로 언제 리렌더링 되는지 살펴보자.
+
+  ![Alt text](image-6.png)
+
+  - 맨 처음 웹페이지가 로드될 때 둘 다 렌더링 되었다가, 클릭 이벤트가 발생해 데이터가 변경되었을 때 `Countinue` 버튼도 리렌더링 되는 것을 알 수 있다.
+  - 두 번째 버튼 컴포넌트의 데이터가 변경되지 않았음에도 `ReactJS`의 규칙에 의해 `App` 컴포넌트(부모)의 `state`가 변경되어 리렌더링 되고 있다.
+  - 하지만, `ReactJS`에게 이 컴포넌트가 리렌더링 되지 않도록 할 수 있다.
+
+- 컴포넌트의 `Prop`이 변경되지 않는 한에서 리렌더링의 여부를 결정할 수 있다.
+
+  ```jsx
+  function Btn({ text, onClick }) {
+    console.log(text, "was rended");
+    return (
+      <button
+        onClick={onClick}
+        style={{
+          backgroundColor: "tomato",
+          color: "white",
+          padding: "10px 20px",
+          border: 0,
+          borderRadius: 10,
+        }}
+      >
+        {text}
+      </button>
+    );
+  }
+
+  const MemorizedBtn = React.memo(Btn); // 이런 기능이 있음
+
+  function App() {
+    const [value, setValue] = React.useState("Save Changes");
+    const changeValue = () => setValue("Revert Changes");
+    return (
+      <div>
+        <MemorizedBtn text={value} onClick={changeValue} />
+        <MemorizedBtn text="Countinue" />
+      </div>
+    );
+  }
+  ```
+
+  ![Alt text](image-7.png)

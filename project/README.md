@@ -1,5 +1,6 @@
 - [CREATE REACT APP](#create-react-app)
   - [Introduction](#introduction)
+  - [Tour of CRA](#tour-of-cra)
 
 ## CREATE REACT APP
 
@@ -67,4 +68,151 @@
     </React.StrictMode>,
     document.getElementById("root")
   );
+  ```
+
+### Tour of CRA
+
+- `src` 폴더에 `Button.js` 파일을 만들고 버튼을 만들어보자.
+
+  ```jsx
+  function Button({ text }) {
+    return <button>{text}</button>;
+  }
+
+  export default Button;
+  ```
+
+- `App.js`에 `import` 하고 버튼 컴포넌트를 렌더링 해주자.
+
+  ```jsx
+  import Button from "./Button";
+
+  function App() {
+    return (
+      <div>
+        <h1>Welcom back!</h1>
+        <Button text={"Continue"} />
+      </div>
+    );
+  }
+
+  export default App;
+  ```
+
+- `PropTypes`를 체크하고 싶으니 `prop-types`를 설치해보자.
+
+  - 터미널에 위 명령어를 입력하면 된다.
+    `npm i prop-types`
+
+- `Button.js`
+
+  ```jsx
+  import PropTypes from "prop-types";
+
+  function Button({ text }) {
+    return <button>{text}</button>;
+  }
+
+  Button.propTypes = {
+    text: PropTypes.string.isRequired,
+  };
+
+  export default Button;
+  ```
+
+- 익숙한 방식으로 작성할 수 있다.
+
+  - 기존에 하던 코드와 똑같지만 다른 점은 서로 다른 파일들로 코드를 분할하는 등의 작업을 할 수 있게 된 것이다.
+  - 또한, 특정 컴포넌트(여기서는 `Button`)를 위한 `css` 파일을 만들 수 있는 기능을 얻었다는 것이다.
+
+- 먼저, `css`에 대한 두 가지 옵션이 있다.
+
+  1.  `style.css`를 만들고 `import`해오는 것
+      `style.css`
+
+      ```css
+      button {
+        color: white;
+        background-color: tomato;
+      }
+      ```
+
+      `index.js`
+
+      ```js
+      import "./style.css";
+      ...
+      ```
+
+      - `index.js`에 `style.css`를 `import` 한다면 `index.js`에 있는 모든 버튼은 배경이 빨간색인 버튼이 될 것이다.
+      - 이때 다른 버튼을 만들고 이 버튼은 빨간색이 되지 않기를 원할 때, `index.js`에 `style.css`를 `import` 하지 않을 것이다.
+
+  2.  `style prop`으로 `css` 변경하기
+      `Button.js`
+      ```jsx
+      function Button({ text }) {
+        return (
+          <button
+            style={{
+              backgroundColor: "tomato",
+              color: "white",
+            }}
+          >
+            {text}
+          </button>
+        );
+      }
+      ```
+      - 이 경우 `css` 파일이 없는 대신 `javascript`를 작성해야 한다.
+      - 한 파일에 수많은 `css`가 한 파일에 존재할 것이다.
+
+- 이를 동시에 해결하기 위한 `create-react-app`의 핵심은 `CSS module`이다.
+
+- `Button.css`의 파일 이름을 `Button.module.css`로 바꾼 뒤, `btn`이라는 클래스를 만들어보자.
+  `Button.moduel.css`
+
+  ```jsx
+  .btn {
+  color: white;
+  background-color: tomato;
+  }
+
+  ```
+
+  - `Button.moduel.css`를 `index.js`에 `import` 하지 않고, `Button.js`에 `import 해줄 것이다.`
+
+    ```jsx
+    import styles from "./Button.module.css";
+
+    function Button({ text }) {
+      return <button className={styles.btn}>{text}</button>;
+    }
+    ```
+
+- 결국 `Button.module.css`에 `css` 코드를 작성하고 있지만, `create-react-app`은 `css` 코드를 `javascript` 오브젝트로 변환시켜주고 있다.
+
+- 예를 들어, `App`을 위한 `App.module.css`도 만들 수 있다.
+
+  - `App.module.css`
+
+  ```css
+  .title {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  }
+  ```
+
+  - `App.js`
+
+  ```js
+  import styles from "./App.module.css";
+
+  function App() {
+    return (
+      <div>
+        <h1 className={styles.title}>Welcom back!</h1>
+        <Button text={"Continue"} />
+      </div>
+    );
+  }
   ```

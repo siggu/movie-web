@@ -22,6 +22,7 @@
 - [PROPS](#props)
   - [Props](#props-1)
   - [Memo](#memo)
+  - [Prop Types](#prop-types)
 
 ## THE BASICS OF REACT
 
@@ -1127,3 +1128,114 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
   ```
 
   ![Alt text](image-7.png)
+
+### Prop Types
+
+- 컴포넌트가 많은 `Props`를 가지고 있을 때 문제가 발생할 수 있다.
+
+- 예를 들어, 사용자가 버튼에 `prop`으로 `fontSize`를 전달한다고 해보자.
+
+  ```jsx
+  function Btn({ text, fontSize }) {
+    return (
+      <button
+        style={{
+          ...,
+          fontSize,
+        }}
+      >
+        {text}
+      </button>
+    );
+  }
+
+  function App() {
+    return (
+      <div>
+        <Btn text="Save Changes" fontSize={18} />
+        <Btn text={"Continue"} fontSize={14} />
+      </div>
+    );
+  }
+  ```
+
+- 여기서 실수로 `text`에는 숫자를, `fontSize`에는 문자를 전달했다고 해보자.
+
+  ```jsx
+  function App() {
+    return (
+      <div>
+        <Btn text="Save Changes" fontSize={18} />
+        <Btn text={14} fontSize={"Continue"} />
+      </div>
+    );
+  }
+  ```
+
+  - 코드 상에서는 에러가 아니다. 잘못된 구문이나, 규칙에 어긋난 문자가 없기 때문이다. 하지만 컴포넌트의 방식에서는 에러이다.
+
+- 리액트는 우리가 `text`에 문자를 받고, `fontSize`에 숫자를 받고 싶은지 모른다.
+
+  - 이를 해결하기 위해, 리액트 팀으로부터 나온 `PropTypes`라는 패키지가 존재한다.
+  - `PropTypes`는 어떤 타입의 `prop`을 받고 있는지 체크해준다.
+
+- `컴포넌트_이름.propTypes{}`를 적어주면 `prop`의 타입이 무엇이고, 어떤 모양이어야 하는지 설명해줄 수 있게 된다.
+
+  ```jsx
+  function Btn({ text, fontSize }) {
+    return (
+      ...
+    );
+  }
+  Btn.propTypes = {
+    text: PropTypes.string,
+    fontSize: PropTypes.number,
+  };
+  function App() {
+    return (
+      ...
+    );
+  }
+  ```
+
+- 코드 자체는 유효하기 때문에 리액트는 ui로 어떤 에러도 보여주고 있지 않지만, 잠시 개발모드로 변경하고 콘솔을 확인하면 다음과 같은 오류를 확인할 수 있다.
+  ![Alt text](image-8.png)
+
+- `optionalString: PropTypes.string`, `optionalBool: PropTypes.bool`등과 같은 옵션을 사용하면 말 그대로 옵션(필수가 아님)으로 달 수 있고,
+
+- 만약 필수로 들어가게끔 만들고 싶다면 `requiredFunc: PropTypes.func.isRequired` 등의 `.isRequired`를 달아주면 된다.
+
+- 예를 들어, `text`를 `required`로 설정하고 `fontSize`는 `required` 설정을 하지 않을 수 있다.
+
+  ```jsx
+  Btn.propTypes = {
+    text: PropTypes.string.isRequired,
+    fontSize: PropTypes.number,
+  };
+  ```
+
+- 사용자가 원한다면 `default value`(기본값)을 설정할 수 있는데,
+
+  - `Javascript`의 문법 덕분에 설정할 수 있다.
+
+  ```jsx
+  function Btn({ text, fontSize = 16 }) {
+    return (
+      ...
+    );
+  }
+  Btn.propTypes = {
+    text: PropTypes.string.isRequired,
+    fontSize: PropTypes.number,
+  };
+  function App() {
+    return (
+      <div>
+        <Btn text="Save Changes" fontSize={18} />
+        <Btn text={"Continue"} />
+      </div>
+    );
+  }
+  ```
+
+  - 두 번째 버튼에 `fontSize`가 정의되어 있지 않지만 기본값을 줄 수 있다.

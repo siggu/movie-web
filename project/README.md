@@ -1,6 +1,11 @@
 - [CREATE REACT APP](#create-react-app)
+
   - [Introduction](#introduction)
   - [Tour of CRA](#tour-of-cra)
+
+- [EFFECTS](#efects)
+
+  - [Introductoin](#introduction-1)
 
 ## CREATE REACT APP
 
@@ -216,3 +221,7 @@
     );
   }
   ```
+
+## EFECTS
+
+### Introduction

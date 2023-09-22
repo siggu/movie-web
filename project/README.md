@@ -5,7 +5,8 @@
 
 - [EFFECTS](#efects)
 
-  - [Introductoin](#introduction-1)
+  - [useEffect](#useeffect)
+  - [Deps](#deps)
 
 ## CREATE REACT APP
 
@@ -14,9 +15,11 @@
 1. node.js 설치
 
    - [node.js.org](https://nodejs.org/ko)
+
      <img src="../img/image-9.png" width="400" />
 
    - cmd에 `node-v`, `npx`를 입력했을 때 정상적으로 나온다면 완료
+
      <img src="../img/image-11.png" width="400" />
 
 2. react-app 만들기
@@ -74,6 +77,17 @@
     document.getElementById("root")
   );
   ```
+
+- `vscode`에서 서버 여는 법
+  - `npx`를 설치한 폴더로 들어간다.
+    ```
+    cd 폴더명
+    ```
+  - 서버를 구동시킨다.
+    ```
+    npx start
+    ```
+  - 자동으로 브라우저가 열리게 된다.
 
 ### Tour of CRA
 
@@ -185,6 +199,7 @@
   ```
 
   - `Button.moduel.css`를 `index.js`에 `import` 하지 않고, `Button.js`에 `import 해줄 것이다.`
+    `Button.js`
 
     ```jsx
     import styles from "./Button.module.css";
@@ -198,7 +213,7 @@
 
 - 예를 들어, `App`을 위한 `App.module.css`도 만들 수 있다.
 
-  - `App.module.css`
+  `App.module.css`
 
   ```css
   .title {
@@ -207,7 +222,7 @@
   }
   ```
 
-  - `App.js`
+  `App.js`
 
   ```js
   import styles from "./App.module.css";
@@ -224,4 +239,159 @@
 
 ## EFECTS
 
-### Introduction
+### useEffect
+
+- `state`가 변화할 때 모든 컴포넌트는 다시 실행되고, 코드 또한 다시 실행된다.(리렌더링 된다.)
+
+  - 하지만 api를 참조하는 것과 같이 첫 번째 렌더링에서만 실행되도록 하고 싶은 경우가 있다.
+
+    ```jsx
+    import { useState, useEffect } from "react";
+
+    function App() {
+      const [counter, setValue] = useState(0);
+      const onClick = () => setValue((prev) => prev + 1);
+      console.log("i run all the time");
+      useEffect(() => {
+        console.log("CALL THE API....");
+      }, []);
+      return (
+        <div>
+          <h1>{counter}</h1>
+          <button onClick={onClick}>click me</button>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+
+    > `useEffect`는 두 개의 인자를 받는데, 첫 번째 인자는 한 번만 호출해줄 코드이고, 두 번째는 뒤에서 알아볼 것이다.
+
+- 컴포넌트의 첫 번째 렌더링 시점에 `useEffect`는 함수를 호출해준다.
+
+  - 코드 또한 렌더링 된다.
+
+    <img src="./img/image.png" width="150">
+
+  - 여기서 `state`의 변화가 생기면 `useEffect`는 함수를 호출하지 않는다.
+
+    <img src="./img/image-1.png" width="150">
+
+- 코드는 `state`가 변할 때마다 실행되는 반면, `useEffect` 안에 있는 함수는 한 번만 실행되었다.
+
+- `useEffect`는 쉽게 말해서 코드가 한 번만 실행되도록 보호해준다.
+
+### Deps
+
+- `input`을 추가하고 안에 이벤트리스너로 사용자의 입력값을 받아보자.
+
+  `App.js`
+
+  ```jsx
+  import { useState, useEffect } from "react";
+
+  function App() {
+    const [counter, setValue] = useState(0);
+    const [keyword, setKeyword] = useState("");
+    const onClick = () => setValue((prev) => prev + 1);
+    const onChange = (event) => setKeyword(event.target.value);
+    console.log("i run all the time");
+    useEffect(() => {
+      console.log("CALL THE API....");
+    }, []);
+    return (
+      <div>
+        <input
+          value={keyword}
+          onChange={onChange}
+          type="text"
+          placeholder="Search here..."
+        ></input>
+        <h1>{counter}</h1>
+        <button onClick={onClick}>click me</button>
+      </div>
+    );
+  }
+
+  export default App;
+  ```
+
+  - 새로운 `useState`와 `onChange` 함수를 만들어 `input` 안에 이벤트리스너를 만들어 사용자가 입력한 값을 받을 수 있게 만들었다.
+
+    <img src="./img/image-2.png" width="150">
+
+    - 하지만 값을 입력하거나 바꿀 때마다 `state`를 변경시켜 모든 컴포넌트를 리렌더링 하고 있다. 다행히 `useEffect`를 사용해 api를 매번 렌더링하는 것은 막고 있다.
+
+- 이번에 하고 싶은 것은 검색이다.
+
+  - 검색창에 무언가를 입력했을 때 입력 api를 사용한다고 해보자. 그렇지만 입력할 때마다 입력 api를 불러오고 싶지는 않다.
+
+- 입력창에 `marvel`을 검색해보자.
+
+  ```jsx
+  import { useState, useEffect } from "react";
+
+  function App() {
+    ...
+    console.log("i run all the time");
+    useEffect(() => {
+      console.log("CALL THE API....");
+    }, []);
+    console.log("SEARCH FOR", keyword);
+    return (
+      ...
+    );
+  }
+  ```
+
+  <img src="./img/image-3.png" width="150">
+
+  - `marvel`을 찾았으니 목적은 달성했다. 하지만, 여기서 버튼을 계속 누르면 값을 계속 찾게 된다.
+
+    <img src="./img/image-4.png" width="150">
+
+    - 검색 키워드에 변화가 있을 때만 검색을 하고 싶은 것이지, `counter`가 변화할 때에도 검색을 하고 싶은 것은 아니다.
+
+- `useEffect` 함수를 하나 더 작성해보자.
+
+  ```jsx
+  useEffect(() => {
+    console.log("SEARCH FOR", keyword);
+  }, [keyword]);
+  ```
+
+  - 여기서 하는 것은 "`keyword`가 변화할 때만 코드를 실행해라" 라고 하는 것이다.
+
+    <img src="./img/image-5.png" width="150">
+
+    - 더이상 검색은 하지 않는 것을 볼 수 있다.
+
+- 아직 완벽하다고 할 수 없는데, 그 이유는 브라우저를 처음 시작할 때에도 검색이 되고 있기 때문이다.
+
+  ```jsx
+  useEffect(() => {
+    if (keyword !== "" && keyword.length > 6) {
+      console.log("SEARCH FOR", keyword);
+    }
+  }, [keyword]);
+  ```
+
+  - 위와 같은 조건을 달면 브라우저를 처음 시작할 때 검색이 되지 않는다.
+
+  - `useEffect`의 두 번째 인자를 다르게 함으로써 특정 코드를 조건에 맞게 렌더링할 수 있다.
+
+    ```jsx
+    useEffect(() => {
+      console.log("I run only once.");
+    }, []);
+    useEffect(() => {
+      console.log("I run when 'keyword' changes");
+    }, [keyword]);
+    useEffect(() => {
+      console.log("I run when 'counter' changes");
+    }, [counter]);
+    useEffect(() => {
+      console.log("I run when 'keyword' & 'counter' changes");
+    }, [keyword, counter]);
+    ```

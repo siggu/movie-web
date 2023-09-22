@@ -7,6 +7,7 @@
 
   - [useEffect](#useeffect)
   - [Deps](#deps)
+  - [Cleanup](#cleanup)
 
 ## CREATE REACT APP
 
@@ -395,3 +396,94 @@
       console.log("I run when 'keyword' & 'counter' changes");
     }, [keyword, counter]);
     ```
+
+### Cleanup
+
+- 그렇게 많이 쓰이는 것은 아니지만 `Cleanup function`을 배워보자.
+  `App.js`
+
+  ```jsx
+  import { useState, useEffect } from "react";
+
+  function Hello() {
+    useEffect(() => {
+      console.log("Im here!");
+    }, []);
+    return <h1>Hello</h1>;
+  }
+
+  function App() {
+    const [showing, setShowing] = useState(false);
+    const onClick = () => setShowing((prev) => !prev);
+    return (
+      <div>
+        {showing ? <Hello /> : null}
+        <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      </div>
+    );
+  }
+
+  export default App;
+  ```
+
+  - `Hello` 컴포넌트를 보여주고 숨기는 버튼을 만들었다.
+  - 숨기면 `Hello` 컴포넌트는 없어지고(`destroy`), 보여주면 `Hello` 컴포넌트는 생성(`create`)된다.
+
+- `ReactJS`의 기능 중 하나는 컴포넌트가 `destroy` 될 때에도 코드를 실행시킬 수 있다.
+
+  - `useEffect`를 통해 컴포넌트를 `create` 했는데, `destroy` 또한 `useEffect`를 통해 할 수 있다.
+
+    ```jsx
+    function Hello() {
+      useEffect(() => {
+        console.log("created :)");
+        return () => console.log("destroyed :(");
+      }, []);
+      return <h1>Hello</h1>;
+    }
+    ```
+
+    <table>
+    <tr>
+    <th> Show </th>
+    <th> Hide </th>
+    </tr>
+    <tr>
+    <td>
+
+    <img src="./img/image-6.png" height="30">
+
+    </td>
+    <td>
+
+    <img src="./img/image-7.png" height="30">
+
+    </td>
+    </tr>
+    </table>
+
+- 이 코드를 잘게 쪼개서 생각해보자.
+
+  ```jsx
+  function Hello() {
+    function byFn() {
+      console.log("bye :(");
+    }
+    function hiFn() {
+      console.log("created :)");
+      return byFn;
+    }
+    useEffect(hiFn, []);
+    return <h1>Hello</h1>;
+  }
+  ```
+
+  - `Hello` 컴포넌트가 생성될 때, `hiFn`이 실행되고 코드가 실행될 것이다.
+
+  - `Hello` 컴포넌트가 언제 파괴되는지 알고 싶다면 `hiFn`이 `byFn`을 `return` 해주어야 한다.
+
+- 총정리
+  - `useEffect`는 인자로 `function`과 `dependency`를 받는다.
+  - `fucntion`은 `dependency`가 변화될 때 호출된다.
+  - 위의 경우에는 `dependency`가 비어있으므로, 컴포넌트가 처음 생성될 때 `function`이 호출된 후에 다시는 호출되지 않는다.
+  - 컴포넌트가 파괴될 때도 `function`을 실행하고 싶다면, 호출된 `function`에서 파괴될 때 실행시킬 `fucntion`을 `return` 해주어야 한다.

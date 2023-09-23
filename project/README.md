@@ -9,6 +9,9 @@
   - [Deps](#deps)
   - [Cleanup](#cleanup)
 
+- [PRACTICE MOVIE APP](#practice-movie-app)
+  - [To Do List part One](#to-do-list-part-one)
+
 ## CREATE REACT APP
 
 ### Introduction
@@ -487,3 +490,97 @@
   - `fucntion`은 `dependency`가 변화될 때 호출된다.
   - 위의 경우에는 `dependency`가 비어있으므로, 컴포넌트가 처음 생성될 때 `function`이 호출된 후에 다시는 호출되지 않는다.
   - 컴포넌트가 파괴될 때도 `function`을 실행하고 싶다면, 호출된 `function`에서 파괴될 때 실행시킬 `fucntion`을 `return` 해주어야 한다.
+
+## PRACTICE MOVIE APP
+
+### To Do List part One
+
+- to do list를 만들어보자.
+
+  - `App.js`
+
+    ```jsx
+    import { useState } from "react";
+
+    function App() {
+      const [toDo, setToDo] = useState();
+      const [toDos, setToDos] = useState([]);
+      const onChange = (event) => setToDo(event.target.value);
+      const onSubmit = (event) => {
+        event.preventDefault();
+        if (toDo === "") {
+          return;
+        }
+        setToDo("");
+      };
+      return (
+        <div>
+          <h1>My To Dos</h1>
+          <form onSubmit={onSubmit}>
+            <input
+              onChange={onChange}
+              value={toDo}
+              type="text"
+              placeholder="Write your to do..."
+            />
+            <button>Add To Do</button>
+          </form>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+
+    - 여기서 to do를 추가할 때, `toDos`의 `array`에 값을 넣고 싶다.
+
+      - 바닐라 js에서는 `toDos.push()` 같은 방식으로 썼을 것이다.
+      - 하지만, 리액트에서는 `state`의 값을 직접 수정할 수 없고, `state`를 변경하는 함수를 이용해야 한다.
+
+- `array`를 직접 수정하지 않으면서 `element`를 추가하는 방법을 알아보자.
+
+  - `setToDos`에 직전값을 받아올 것이다.
+
+    - 첫 번째 방법은 `setToDo`처럼 직접 값을 수정하는 방법이고
+    - 두 번째 방법은 함수를 넣는 것이다.
+
+- 두 번째 방법을 이용해 첫 번째 인자로 현재의 `state`를 받고, 두 번째 인자로는 새로운 `array`를 받는 함수를 만들 것이다.
+
+  - 새로운 `array`에는 `toDo`와 이전의 `toDos`를 갖게 될 것이다.
+
+- 예시를 통해 어떻게 하는 지 알아보자.
+
+  - `const number = [1, 2, 3, 4]` 이 `array`에 숫자 `5`를 추가하고 싶다.
+
+    - `[number, 5]` 라고 입력한다면 의도하지 않은 결과가 나온다.
+
+      <img src="./img/image-8.png">
+
+    - 대신 `array`에 `...`을 앞에 붙이면 `array`의 `element`를 `return` 해준다.
+
+      <img src="./img/image-9.png">
+
+```jsx
+function App() {
+  ...
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    setToDos((currentArray) => [toDo, ...currentArray]);
+    setToDo("");
+  };
+  return(
+    ...
+  );
+}
+```
+
+- 처음에는 비어있는 `array`로 시작한다.
+- 첫 번째 todo를 입력할 때 현재 비어있는 `currentArray`를 받아온다.
+- `setToDos`는 입력한 todo(첫 번재 todo)와 비어있는 `currentArray`의 `element`를 합친다.`currentArray=['첫 번째 todo']`
+- 두 번째 todo를 입력할 때 `currentArray`에는 첫 번째 입력한 todo가 있다.
+- `setToDos`는 입력한 todo(두 번째 todo)와 `currentArray`의 `element`를 합친다.`currentArray=['두 번째 todo', '첫 번재 todo']`
+
+  <img src="./img/image-10.png" />

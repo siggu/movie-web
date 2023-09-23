@@ -12,6 +12,7 @@
 - [PRACTICE MOVIE APP](#practice-movie-app)
   - [To Do List part One](#to-do-list-part-one)
   - [To Do List part Two](#to-do-list-part-two)
+  - [Coin Tracker](#coin-tracker)
 
 ## CREATE REACT APP
 
@@ -647,3 +648,63 @@ function App() {
 
 </div>
 </details>
+
+### Coin Tracker
+
+- 암호화폐들과 그 가격을 나열하는 프로젝트를 만들어보자.
+
+  - `https://api.coinpaprika.com/v1/tickers`
+
+    - 위 api를 통해 가상화폐에 대한 정보를 얻을 수 있다.
+
+      ```jsx
+      useEffect(() => {
+        fetch("https://api.coinpaprika.com/v1/tickers");
+      }, []);
+      ```
+
+      <img src="./img/image-16.png" width="500"/>
+
+      - `response`로부터 `json`을 추출해보자.
+
+- api 호출이 성공했을 경우, `response`를 받아서 `response.json`을 `return` 해주자.
+
+  > `then`은 api 호출이 성공했을 경우 응답(`response`) 객체를 `resolve`하고
+  > 실패했을 경우(`catch`)에는 예외(`error`)를 `reject`한다.
+
+  ```jsx
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  }, []);
+  ```
+
+  <img src="./img/image-17.png" />
+
+  - 2500개의 코인 데이터를 받았다.
+
+- `json`에 데이터를 가지고 있고, 컴포넌트에 보여주기 위해서는 이 데이터를 `state`에 넣어주면 된다.
+
+  ```jsx
+  function App() {
+    const [loading, setLoading] = useState(true);
+    const [coins, setCoins] = useState([]);
+    useEffect(() => {
+      fetch("https://api.coinpaprika.com/v1/tickers")
+        .then((response) => response.json())
+        .then((json) => {
+          setCoins(json);
+          setLoading(false);
+        });
+    }, []);
+    return (
+      <div>
+        <h1>The Coins!</h1>
+        {loading ? <strong>Loading...</strong> : null}
+      </div>
+    );
+  }
+  ```
+
+  - api 호출이 성공했을 경우 `coins`의 `state`를 `json`으로 변경해주고, 로딩을 끝내준다.

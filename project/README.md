@@ -11,6 +11,7 @@
 
 - [PRACTICE MOVIE APP](#practice-movie-app)
   - [To Do List part One](#to-do-list-part-one)
+  - [To Do List part Two](#to-do-list-part-two)
 
 ## CREATE REACT APP
 
@@ -491,6 +492,8 @@
   - 위의 경우에는 `dependency`가 비어있으므로, 컴포넌트가 처음 생성될 때 `function`이 호출된 후에 다시는 호출되지 않는다.
   - 컴포넌트가 파괴될 때도 `function`을 실행하고 싶다면, 호출된 `function`에서 파괴될 때 실행시킬 `fucntion`을 `return` 해주어야 한다.
 
+<br />
+
 ## PRACTICE MOVIE APP
 
 ### To Do List part One
@@ -584,3 +587,63 @@ function App() {
 - `setToDos`는 입력한 todo(두 번째 todo)와 `currentArray`의 `element`를 합친다.`currentArray=['두 번째 todo', '첫 번재 todo']`
 
   <img src="./img/image-10.png" />
+
+### To Do List part Two
+
+- `array`로부터 동일한 컴포넌트에 있는 `element`들을 렌더링할 수 있는 방법을 알아볼 것이다.
+
+- `array`의 `element`를 바꾸고 싶을 때가 있다.
+
+  <img src="./img/image-11.png" />
+
+  - `map`은 하나의 `array`에 있는 `item`을 바꿔주고 새로운 `arary`를 `return`한다.
+
+    <img src="./img/image-13.png" />
+
+- `map`은 첫 번째 인자로 현재의 `item`을 가져올 수 있고, `return`하는 어떤 값이던지 새로운 `array`에 들어가게 된다. 즉, `item` 자체를 `return` 할 수도 있다는 말이다.
+
+  <img src="./img/image-14.png" />
+
+- `item` 자체를 리스트에 넣고 `return`해주면,
+
+  ```jsx
+  return (
+    <div>
+      ...
+      <ul>
+        {toDos.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+  ```
+
+  <img src="./img/image-15.png" width="200"/>
+
+  - `array` 안의 `item`들이 리스트 형태로 바뀌게 된다.
+
+- 여기서 `react`가 기본적으로 `list` 안에 있는 모든 `item`을 인식하기 때문에, 같은 컴포넌트의 `list`를 렌더링할 때 `key`라는 `prop`을 넣어주어야 한다.
+
+  ```jsx
+  return (
+    <div>
+      ...
+      <hr />
+      <ul>
+        {toDos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+  ```
+
+<details>
+<summary>index를 넣는 이유</summary>
+<div markdown="1">
+
+<a href="https://ko.legacy.reactjs.org/docs/lists-and-keys.html#keys">reactjs 공식문서</a>
+
+</div>
+</details>

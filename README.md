@@ -94,7 +94,7 @@
 
   `index.html`로 돌아왔을 때 아무것도 없지만 `console`에 `React`를 부를 수 있어야 한다.
 
-  ![Alt text](image.png)
+  ![Alt text](./img/image.png)
 
   > 이렇게 뜬다면 `React`가 코드에 있다는 뜻이다.
 
@@ -308,7 +308,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 
 ### setState part One
 
-![Alt text](image-1.png)
+![Alt text](./img/image-1.png)
 
 - `React.useState()`는 `undefined`와 함수를 지닌 배열을 받는다.
 
@@ -454,7 +454,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
   - `useState()`는 `array`를 제공하는데, 첫 번째 `element`는 현재의 값이 되고, 두 번째 `element`는 데이터를 변경해주는 함수가 들어간다.
 
 - 사용자가 다른 값을 입력할 때마다 `value`를 업데이트 시켜보자.
-  ![Alt text](image-3.png)
+  ![Alt text](./img/image-3.png)
 
   > `console.log(event);`를 해보면 `target`에 `value`를 가지고 있다는 것이다. 즉, `event.target.value`를 해주면 `value`값에 접근할 수 있다.
 
@@ -970,7 +970,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
   }
   ```
 
-  ![Alt text](image-4.png)
+  ![Alt text](./img/image-4.png)
 
   - `Props`는 `App` 컴포넌트에서 보낸 모든 것들을 갖는 오브젝트이다. 그리고, `text`라는 이름의 `key`를 가지고 있다.
 
@@ -1030,7 +1030,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
     }
     ```
 
-    ![Alt text](image-5.png)
+    ![Alt text](./img/image-5.png)
 
 ### Memo
 
@@ -1086,7 +1086,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
 
 - `App` 컴포넌트에 두 개의 버튼 컴포넌트가 분할정복 되어 있는데, 하나는 클릭 이벤트가 발생하면 데이터가 변경되고 하나는 데이터가 변경되지 않는다. `Btn` 컴포넌트에 `console.log(text, "was rended")`로 언제 리렌더링 되는지 살펴보자.
 
-  ![Alt text](image-6.png)
+  ![Alt text](./img/image-6.png)
 
   - 맨 처음 웹페이지가 로드될 때 둘 다 렌더링 되었다가, 클릭 이벤트가 발생해 데이터가 변경되었을 때 `Countinue` 버튼도 리렌더링 되는 것을 알 수 있다.
   - 두 번째 버튼 컴포넌트의 데이터가 변경되지 않았음에도 `ReactJS`의 규칙에 의해 `App` 컴포넌트(부모)의 `state`가 변경되어 리렌더링 되고 있다.
@@ -1127,7 +1127,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
   }
   ```
 
-  ![Alt text](image-7.png)
+  ![Alt text](./img/image-7.png)
 
 ### Prop Types
 
@@ -1199,7 +1199,7 @@ DOM 변경을 직접 처리함. DOM 변경이 발생하면 브라우저는 변�
   ```
 
 - 코드 자체는 유효하기 때문에 리액트는 ui로 어떤 에러도 보여주고 있지 않지만, 잠시 개발모드로 변경하고 콘솔을 확인하면 다음과 같은 오류를 확인할 수 있다.
-  ![Alt text](image-8.png)
+  ![Alt text](./img/image-8.png)
 
 - `optionalString: PropTypes.string`, `optionalBool: PropTypes.bool`등과 같은 옵션을 사용하면 말 그대로 옵션(필수가 아님)으로 달 수 있고,
 

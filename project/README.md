@@ -708,3 +708,32 @@ function App() {
   ```
 
   - api 호출이 성공했을 경우 `coins`의 `state`를 `json`으로 변경해주고, 로딩을 끝내준다.
+
+- `coins`라는 변수에 코인들의 `array`가 있다는 것을 알 수 있다.
+
+  - `map`을 이용해 코인들을 리스트에 담아보자.
+
+    <img src="./img/image-18.png" width="400" />
+
+    - 많은 정보 중에 `name`, `symbol`, `quotes.USD.price`를 가져와보자.
+
+      ```jsx
+      function App() {
+        ...
+        return (
+          <div>
+            <h1>The Coins!</h1>
+            {loading ? <strong>Loading...</strong> : null}
+            <ul>
+              {coins.map((coin) => (
+                <li>
+                  {coin.name} ({coin.symbol}): {coin.quotes.USD.price} USD
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+      ```
+
+- 리스트로 만들지 않고 `select`와 `option`을 이용해 원하는 코인을 선택해서 보여주거나, 달러를 입력했을 때 몇 개의 코인을 구입할 수 있는지 등으로 만들 수 있다.

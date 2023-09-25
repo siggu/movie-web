@@ -13,6 +13,7 @@
   - [To Do List part One](#to-do-list-part-one)
   - [To Do List part Two](#to-do-list-part-two)
   - [Coin Tracker](#coin-tracker)
+  - [Movie App part One](#movie-app-part-one)
 
 ## CREATE REACT APP
 
@@ -737,3 +738,18 @@ function App() {
       ```
 
 - 리스트로 만들지 않고 `select`와 `option`을 이용해 원하는 코인을 선택해서 보여주거나, 달러를 입력했을 때 몇 개의 코인을 구입할 수 있는지 등으로 만들 수 있다.
+
+### Movie App part One
+
+- 영화의 정보를 보여주고 링크를 넣어 더 많은 정보를 볼 수 있게 다른 곳으로 연결하는 영화 소개 어플리케이션을 만들어보자.
+
+- 영화진흥위원회에서 제공하는 일별 박스오피스 리스트 api
+
+  - `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+
+  <details>
+  <summary>영화진흥위원회</summary>
+  <div markdown="1">
+  <a href="https://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do">영화진흥위원회 제공서비스</a>
+  </div>
+  </details>

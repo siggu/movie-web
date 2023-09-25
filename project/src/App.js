@@ -2,31 +2,14 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
   useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
+    fetch(
+      `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+    )
       .then((response) => response.json())
-      .then((json) => {
-        setCoins(json);
-        setLoading(false);
-      });
+      .then((json) => console.log(json));
   }, []);
-  return (
-    <div>
-      <h1>The Coins!{loading ? "" : `(${coins.length})`}</h1>
-      {loading ? (
-        <strong>Loading...</strong>
-      ) : (
-        <select>
-          {coins.map((coin) => (
-            <option>
-              {coin.name} ({coin.symbol}): {coin.quotes.USD.price} USD
-            </option>
-          ))}
-        </select>
-      )}
-    </div>
-  );
+  return <div>{loading ? <h1>Loading...</h1> : null}</div>;
 }
 
 export default App;

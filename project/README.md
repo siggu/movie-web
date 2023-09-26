@@ -748,8 +748,80 @@ function App() {
   - `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
 
   <details>
-  <summary>영화진흥위원회</summary>
+  <summary>영화 관련 api</summary>
   <div markdown="1">
   <a href="https://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do">영화진흥위원회 제공서비스</a>
+
+  <a href="https://ji-gwang.tistory.com/54">영화 사이트 만들기</a>
   </div>
   </details>
+
+- `boxOfficeResult`에서 `dailyBoxOfficeList`로 영화 리스트를 받아올 수 있다.
+  <img src="./img/image-19.png" width="600"/>
+
+  - `state`를 만들어서 영화 리스트를 저장하고 로딩을 끝내자.
+
+    ```jsx
+    function App() {
+      const [loading, setLoading] = useState(true);
+      const [moveis, setMovies] = useState([]);
+      useEffect(() => {
+        fetch(
+          `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+        )
+          .then((response) => response.json())
+          .then((json) => {
+            setMovies(json.boxOfficeResult);
+            setLoading = false;
+          });
+      }, []);
+      return <div>{loading ? <h1>Loading...</h1> : null}</div>;
+    }
+    ```
+
+- 보통 `then`보다 `async-await`를 사용하는데 바꿔보자.
+
+  ```jsx
+  function App() {
+    const [loading, setLoading] = useState(true);
+    const [moveis, setMovies] = useState([]);
+    const getMovies = async () => {
+      const response = await fetch(
+        `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+      );
+      const json = await response.json();
+      setMovies(json.boxOfficeResult);
+      setLoading(false);
+    };
+    useEffect(() => {
+      getMovies();
+    }, []);
+    return <div>{loading ? <h1>Loading...</h1> : null}</div>;
+  }
+  ```
+
+  - `async`와 `await`를 쓰는 것은 `then`과 같은 역할을 한다.
+
+    - 코드를 더 간단하게 만들 수도 있다.
+
+      ```jsx
+      function App() {
+        const [loading, setLoading] = useState(true);
+        const [moveis, setMovies] = useState([]);
+        const getMovies = async () => {
+          const json = await (
+            await fetch(
+              `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+            )
+          ).json();
+          setMovies(json.boxOfficeResult);
+          setLoading(false);
+        };
+        useEffect(() => {
+          getMovies();
+        }, []);
+        return <div>{loading ? <h1>Loading...</h1> : null}</div>;
+      }
+      ```
+
+      > awiat 의 김밥같은 것이다.

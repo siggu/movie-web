@@ -14,6 +14,7 @@
   - [To Do List part Two](#to-do-list-part-two)
   - [Coin Tracker](#coin-tracker)
   - [Movie App part One](#movie-app-part-one)
+  - [Movie App part Two](#movie-app-part-two)
 
 ## CREATE REACT APP
 
@@ -848,3 +849,89 @@ function App() {
     </div>
   );
   ```
+
+### Movie App part Two
+
+- 한 페이지에서 다른 페이지로 넘어가는 방법을 배워보자.
+
+- 우선 `Movie` 컴포넌트를 만들고 `App`에서 `import` 해오자.
+
+  `Movie.js`
+
+  ```jsx
+  import PropTypes from "prop-types";
+
+  function Movie({ coverImg, title, summary, genres }) {
+    return (
+      <div>
+        <img src={coverImg} alt={title} />
+        <h2>{title}</h2>
+        <p>{summary}</p>
+        <ul>{genres && genres.map((g) => <li key={g}>{g}</li>)}</ul>
+      </div>
+    );
+  }
+
+  Movie.propTypes = {
+    coverImg: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    summary: PropTypes.string.isRequired,
+    genres: PropTypes.arrayOf(PropTypes.string).isRequired,
+  };
+
+  export default Movie;
+  ```
+
+  `App.js`
+
+  ```jsx
+  function App() {
+    ...
+    return (
+      <div>
+        {loading ? (
+          <h1>Loading...</h1>
+        ) : (
+          <div>
+            {movies.map((movie) => (
+              <Movie
+                key={movie.id}
+                coverImg={movie.medium_cover_image}
+                title={movie.title}
+                summary={movie.summary}
+                genres={movie.genres}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+  ```
+
+- `React Router`를 이용해 페이지를 전환해보자.
+
+  - 터미널에 `npm install router-react-dom` 명령어로 `react-router`를 설치해준다.
+    > 특정 버전 재설치 방법: `npm i react-router-dom@5.3.0`
+
+- 이제 코드를 바꾸거나 이동을 시켜야 한다.
+
+  - 그 이유는 `route` 별로 생각해야 하기 때문이다.
+
+- `home route`에는 모든 영화를 보여주고, `movie route`에는 하나의 영화만 보여줄 것이다.
+
+  - `src` 폴더에 `routes` 폴더를 만들고 `Home.js` 폴더를 만들자.
+  - `Home.js`에 `App.js`에 있던 코드들을 전부 잘라넣는다.
+  - 그리고 `routes` 폴더에 `Detail.js` 파일을 만든다.
+
+    `Detail.js`
+
+    ```jsx
+    function Detail() {
+      return <h1>Detail</h1>;
+    }
+
+    export default Detail;
+    ```
+
+- `App.js`는 더이상 영화들을 보여주지 않고 대신 `router`를 렌더링 한다. `router`는 `URL`을 보고 있는 컴포넌트이고 `URL`을 바꾸면 그에 따라 `Home`과 `Detail` 컴포넌트를 렌더링할 것이다.

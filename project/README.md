@@ -743,21 +743,19 @@ function App() {
 
 - 영화의 정보를 보여주고 링크를 넣어 더 많은 정보를 볼 수 있게 다른 곳으로 연결하는 영화 소개 어플리케이션을 만들어보자.
 
-- 영화진흥위원회에서 제공하는 일별 박스오피스 리스트 api
-
-  - `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
-
   <details>
   <summary>영화 관련 api</summary>
   <div markdown="1">
   <a href="https://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do">영화진흥위원회 제공서비스</a>
 
   <a href="https://ji-gwang.tistory.com/54">영화 사이트 만들기</a>
+
+  <a href="https://www.themoviedb.org/">The Movie DB</a>
   </div>
   </details>
 
-- `boxOfficeResult`에서 `dailyBoxOfficeList`로 영화 리스트를 받아올 수 있다.
-  <img src="./img/image-19.png" width="600"/>
+- `yts.mx`에서 api를 통해 영화 리스트를 받아올 수 있다.
+  <img src="./img/image-20.png" width="600"/>
 
   - `state`를 만들어서 영화 리스트를 저장하고 로딩을 끝내자.
 
@@ -767,7 +765,7 @@ function App() {
       const [moveis, setMovies] = useState([]);
       useEffect(() => {
         fetch(
-          `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+          `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
         )
           .then((response) => response.json())
           .then((json) => {
@@ -787,7 +785,7 @@ function App() {
     const [moveis, setMovies] = useState([]);
     const getMovies = async () => {
       const response = await fetch(
-        `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+        `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
       );
       const json = await response.json();
       setMovies(json.boxOfficeResult);
@@ -811,7 +809,7 @@ function App() {
         const getMovies = async () => {
           const json = await (
             await fetch(
-              `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+              `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
             )
           ).json();
           setMovies(json.boxOfficeResult);
@@ -825,3 +823,28 @@ function App() {
       ```
 
       > awiat 의 김밥같은 것이다.
+
+- `title`, `summary`, `genre`, `image` 등을 가져올 수 있다.
+
+  ```jsx
+  return (
+    <div>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div>
+          {movies.map((movie) => (
+            <div key={movie.id}>
+              <img src={movie.medium_cover_image} />
+              <h2>{movie.title}</h2>
+              <p>{movie.summary}</p>
+              <ul>
+                {movie.genres && movie.genres.map((g) => <li key={g}>{g}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+  ```

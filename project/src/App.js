@@ -6,12 +6,11 @@ function App() {
   const getMovies = async () => {
     const json = await (
       await fetch(
-        `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
+        `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
       )
     ).json();
-    setMovies(json.boxOfficeResult.dailyBoxOfficeList);
+    setMovies(json.data.movies);
     setLoading(false);
-    console.log(json.boxOfficeResult.dailyBoxOfficeList);
   };
   useEffect(() => {
     getMovies();
@@ -23,13 +22,12 @@ function App() {
       ) : (
         <div>
           {movies.map((movie) => (
-            <div key={movie.rnum}>
-              <h2>{movie.movieNm}</h2>
-              <p>{movie.openDt}</p>
+            <div key={movie.id}>
+              <img src={movie.medium_cover_image} />
+              <h2>{movie.title}</h2>
+              <p>{movie.summary}</p>
               <ul>
-                {movie.boxofficeType.map((type) => (
-                  <li key={type}>{type}</li>
-                ))}
+                {movie.genres && movie.genres.map((g) => <li key={g}>{g}</li>)}
               </ul>
             </div>
           ))}

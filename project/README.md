@@ -16,6 +16,7 @@
   - [Movie App part One](#movie-app-part-one)
   - [Movie App part Two](#movie-app-part-two)
   - [React Router](#react-router)
+  - [Parameters](#parameters)
 
 ## CREATE REACT APP
 
@@ -1008,3 +1009,5 @@ function App() {
   ```
 
   - 링크를 클릭하면 페이지가 새로고침되지 않고 다른 `route`로 이동할 수 있다.
+
+### Parameters

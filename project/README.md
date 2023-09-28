@@ -15,6 +15,7 @@
   - [Coin Tracker](#coin-tracker)
   - [Movie App part One](#movie-app-part-one)
   - [Movie App part Two](#movie-app-part-two)
+  - [React Router](#react-router)
 
 ## CREATE REACT APP
 
@@ -935,3 +936,75 @@ function App() {
     ```
 
 - `App.js`는 더이상 영화들을 보여주지 않고 대신 `router`를 렌더링 한다. `router`는 `URL`을 보고 있는 컴포넌트이고 `URL`을 바꾸면 그에 따라 `Home`과 `Detail` 컴포넌트를 렌더링할 것이다.
+
+### React Router
+
+- `react-router-dom`을 사용하기 위해서는 몇 가지를 `import` 해주어야 한다.
+
+  > `npm i react-router-dom@6.15` 명령어로 최신 버전 설치
+  > `package.json`에서 바뀐 버전 확인(앞에 `^` 붙이기)
+
+  `App.js`
+
+  ```jsx
+  import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+  import Detail from "./routes/Detail";
+  import Home from "./routes/Home";
+
+  function App() {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="movie" element={<Detail />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  export default App;
+  ```
+
+- 유저가 영화 제목을 클릭하면 `Detail` `route`로 이동시키고 싶다.
+
+  - `Movie`에서 링크를 만들어서 이동시키면 되긴 하지만 페이지 전체가 재실행 된다는 단점이 있다.
+
+    `Movie.js`
+
+    ```jsx
+    function Movie({ coverImg, title, summary, genres }) {
+      return (
+        <div>
+          <img src={coverImg} alt={title} />
+          <h2>
+            <a href="/movie">{title}</a>
+          </h2>
+          <p>{summary}</p>
+          <ul>{genres && genres.map((g) => <li key={g}>{g}</li>)}</ul>
+        </div>
+      );
+    }
+    ```
+
+- 대신에 `Link to`를 사용하자.
+
+  `Movie.js`
+
+  ```jsx
+  import { Link } from "react-router-dom";
+
+  function Movie({ coverImg, title, summary, genres }) {
+    return (
+      <div>
+        <img src={coverImg} alt={title} />
+        <h2>
+          <Link to="/movie">{title}</Link>
+        </h2>
+        <p>{summary}</p>
+        <ul>{genres && genres.map((g) => <li key={g}>{g}</li>)}</ul>
+      </div>
+    );
+  }
+  ```
+
+  - 링크를 클릭하면 페이지가 새로고침되지 않고 다른 `route`로 이동할 수 있다.

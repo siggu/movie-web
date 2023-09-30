@@ -1011,3 +1011,81 @@ function App() {
   - 링크를 클릭하면 페이지가 새로고침되지 않고 다른 `route`로 이동할 수 있다.
 
 ### Parameters
+
+- `Detail`에 유저가 원하는 영화의 정보를 띄워보자.
+
+- `Movie.js`에서 `id` `prop`을 받고,
+
+  `Movie.js`
+
+  ```jsx
+  function Movie({ id, coverImg, title, summary, genres }) {
+    return (
+      <div>
+        ...
+        <h2>
+          <Link to={`/movie/${id}`}>{title}</Link>
+        </h2>
+        ...
+      </div>
+    );
+  }
+
+  Movie.propTypes = {
+    id: PropTypes.number.isRequired,
+    ...
+  };
+  ```
+
+  - `Home.js`에서 `id`를 받아올 수 있다.
+
+    `Home.js`
+
+    ```jsx
+    function Home() {
+      ...
+      return (
+        <div>
+          {loading ? (
+            <h1>Loading...</h1>
+          ) : (
+            <div>
+              {movies.map((movie) => (
+                <Movie
+                  key={movie.id}
+                  id={movie.id}
+                  ...
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+    ```
+
+- `Detail.js`에서 특정 영화의 정보가 담긴 api 주소와 `id` 값을 `fetch` 해주면 된다.
+
+  `Detail.js`
+
+  ```jsx
+  function Detail() {
+    const [movies, setMovies] = useState([]);
+    const { id } = useParams();
+    const getMovie = useCallback(async () => {
+      const json = await (
+        await fetch(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
+      ).json();
+      setMovies(json.data.movie);
+      console.log(json.data.movie);
+    });
+    useEffect(() => {
+      getMovie();
+    }, []);
+    return (
+      <div>
+        <h1>Detail</h1>
+      </div>
+    );
+  }
+  ```
